@@ -58,15 +58,8 @@ State Variables
             totalVotingPower += 100;
         }
         
-        // Add new owner as approver if not already
-        if (!approvers[_newOwner]) {
-            approvers[_newOwner] = true;
-            approverCount++;
-        }
-        
-        owner = _newOwner;
-    }
-}
+        End
 // 
-End
+// 
+Contract End
 // 
