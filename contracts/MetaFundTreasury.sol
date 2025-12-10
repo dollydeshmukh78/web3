@@ -1,65 +1,44 @@
-State Variables
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/// @notice Interface of the MetaFundTreasury implementation.
+/// @dev Adjust constructor signature to match your MetaFundTreasury.sol.
+interface IMetaFundTreasury {
+    // Example constructor: constructor(address _governance, address _asset, address _owner)
+}
+
+contract MetaFundTreasuryDeployer {
+    event MetaFundTreasuryDeployed(address indexed treasury, address indexed deployer);
+
+    /// @notice Deploy a new MetaFundTreasury instance.
+    /// @dev Replace parameters and constructor call to match your actual contract.
+    function deployMetaFundTreasury(
+        address governance,
+        address asset,
+        address owner
+    ) external returns (address) {
+        require(governance != address(0), "Invalid governance");
+        require(asset != address(0), "Invalid asset");
+        require(owner != address(0), "Invalid owner");
+
+        // Replace this line with the real constructor for MetaFundTreasury.
+        MetaFundTreasury treasury = new MetaFundTreasury(governance, asset, owner);
+
+        emit MetaFundTreasuryDeployed(address(treasury), msg.sender);
+        return address(treasury);
+    }
+}
+
+/// @dev Stub for the real MetaFundTreasury contract.
+/// Replace with `import "./MetaFundTreasury.sol";` in your project.
+contract MetaFundTreasury {
+    address public governance;
+    address public asset;
     address public owner;
-    uint256 public totalFunds;
-    uint256 public proposalCount;
-    uint256 public constant PROPOSAL_DURATION = 7 days;
-    uint256 public constant QUORUM_PERCENTAGE = 51;
-    
-    Mappings
-    mapping(uint256 => Proposal) public proposals;
-    mapping(address => Member) public members;
-    mapping(uint256 => mapping(address => bool)) public hasVoted;
-    mapping(address => bool) public approvers;
-    
-    address[] public memberList;
-    uint256 public totalVotingPower;
-    uint256 public approverCount;
-    
-    Modifiers
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can call this function");
-        _;
+
+    constructor(address _governance, address _asset, address _owner) {
+        governance = _governance;
+        asset = _asset;
+        owner = _owner;
     }
-    
-    modifier onlyMember() {
-        require(members[msg.sender].isActive, "Only active members can call this function");
-        _;
-    }
-    
-    modifier onlyApprover() {
-        require(approvers[msg.sender], "Only approvers can call this function");
-        _;
-    }
-    
-    modifier proposalExists(uint256 _proposalId) {
-        require(proposals[_proposalId].exists, "Proposal does not exist");
-        _;
-    }
-    
-    modifier notExecuted(uint256 _proposalId) {
-        require(!proposals[_proposalId].executed, "Proposal already executed");
-        _;
-    }
-    
-    Receive function to accept ETH
-    receive() external payable {
-        totalFunds += msg.value;
-        emit FundsDeposited(msg.sender, msg.value, block.timestamp);
-    }
-    
-    Add new owner as member if not already
-        if (!members[_newOwner].isActive) {
-            members[_newOwner] = Member({
-                isActive: true,
-                votingPower: 100,
-                joinedAt: block.timestamp
-            });
-            memberList.push(_newOwner);
-            totalVotingPower += 100;
-        }
-        
-        End
-// 
-// 
-Contract End
-// 
+}
